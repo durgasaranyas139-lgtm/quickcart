@@ -7,8 +7,9 @@ function Header() {
       <p className="header-subtitle">
         Your one-stop shop for everything
       </p>
+      
     </header>
   );
 }
 
-export default Header;
+export default Header;   
