@@ -1,78 +1,61 @@
-import CartSidebar from "./components/CartSidebar.jsx";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
-import Header from './components/Header';
-import ProductList from './components/ProductList';
-import { products } from './data/products';
 
+import Header from './components/Header';
+import HomePage from './components/HomePage';
+import CategoryPage from './components/CategoryPage';
+import CartPage from './components/CartPage';
+import CartSidebar from './components/CartSidebar';
+
+import { products } from './data/products';
+import './styles/App.css';
 
 function App() {
-
-  // 🔹 STATE (memory of app)
-  const [cart, setCart] = useState([]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
-
-  // 🔹 ADD TO CART FUNCTION
-  const addToCart = (product) => {
-    console.log("Adding:", product);
-
-    const existingItem = cart.find(item => item.id === product.id);
-
-    if (existingItem) {
-      // increase quantity
-      setCart(
-        cart.map(item =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        )
-      );
-    } else {
-      // add new item
-      setCart([...cart, { ...product, quantity: 1 }]);
-    }
-  };
-  const removeFromCart = (productId) => {
-  setCart(cart.filter(item => item.id !== productId));
-};
-
-const updateQuantity = (productId, newQuantity) => {
-  if (newQuantity <= 0) {
-    removeFromCart(productId);
-  } else {
-    setCart(
-      cart.map(item =>
-        item.id === productId
-          ? { ...item, quantity: newQuantity }
-          : item
-      )
-    );
-  }
-};
-  const getTotalItems = () => {
-  return cart.reduce((total, item) => total + item.quantity, 0);
-  };
-  const toggleCart = () => {
-    console.log("Cart toggled");
-    setIsCartOpen(!isCartOpen);
-  };
+  // ✅ ONLY search state remains here
+  const [searchTerm, setSearchTerm] = useState('');
 
   return (
-    <div>
-      <Header 
-        cartItemCount={cart.reduce((total, item) => total + item.quantity, 0)}
-        onCartClick={() => setIsCartOpen(!isCartOpen)}
-      />
-      <ProductList 
-        products={products} 
-        onAddToCart={addToCart}
-      />
-      <CartSidebar 
-        isOpen={isCartOpen}
-        cart={cart}
-        onRemoveItem={removeFromCart}
-        onUpdateQuantity={updateQuantity}
-      />
-    </div>
+    <BrowserRouter>
+      <div className="app">
+
+        {/* ✅ Header */}
+        <Header 
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+        />
+
+        {/* ✅ Routes */}
+        <main className="main-content">
+          <Routes>
+            
+            <Route 
+              path="/" 
+              element={
+                <HomePage 
+                  products={products}
+                  searchTerm={searchTerm}
+                />
+              } 
+            />
+
+            <Route 
+              path="/category/:category" 
+              element={<CategoryPage products={products} />} 
+            />
+
+            <Route 
+              path="/cart" 
+              element={<CartPage />} 
+            />
+
+          </Routes>
+        </main>
+
+        {/* ✅ Sidebar */}
+        <CartSidebar />
+
+      </div>
+    </BrowserRouter>
   );
 }
 

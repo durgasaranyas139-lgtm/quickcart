@@ -1,10 +1,14 @@
-function CartSidebar({ isOpen, cart, onRemoveItem, onUpdateQuantity }) {
+import { useCart } from '../context/CartContext';
+
+
+function CartSidebar() {
+    const { cart, isCartOpen, toggleCart, removeFromCart, updateQuantity } = useCart();
     const getTotalPrice = () => {
-  return cart.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  );
-};
+    return cart.reduce(
+        (total, item) => total + item.price * item.quantity,
+        0
+    );
+    };
     return (
         <div
             style={{
@@ -20,39 +24,39 @@ function CartSidebar({ isOpen, cart, onRemoveItem, onUpdateQuantity }) {
             overflowY: "auto"
         }}
         >
-      <h2>Your Cart</h2>
+        <h2>Your Cart</h2>
 
-      {cart.length === 0 ? (
-        <p>Cart is empty</p>
-      ) : (
-        cart.map(item => (
-          <div key={item.id} style={{ marginBottom: "15px" }}>
-            <h4>{item.name}</h4>
+        {cart.length === 0 ? (
+            <p>Cart is empty</p>
+        ) : (
+            cart.map(item => (
+            <div key={item.id} style={{ marginBottom: "15px" }}>
+                <h4>{item.name}</h4>
 
-            <p>Qty: {item.quantity}</p>
+                <p>Qty: {item.quantity}</p>
 
-            {/* 🔴 QUANTITY BUTTONS */}
-            <button onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}>
-              -
-            </button>
+                {/* 🔴 QUANTITY BUTTONS */}
+                <button onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}>
+                -
+                </button>
 
-            <button onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}>
-              +
-            </button>
+                <button onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}>
+                +
+                </button>
 
-            {/* 🔴 REMOVE BUTTON */}
-            <button onClick={() => onRemoveItem(item.id)}>
-              Remove
-            </button>
-            <button onClick={() => setIsCartOpen(false)}>✕</button>
-          </div>
-        ))
-      )}
-      {cart.length > 0 && (
-        <h3>Total: ${getTotalPrice().toFixed(2)}</h3>
-      )}
-    </div>
-  );
+                {/* 🔴 REMOVE BUTTON */}
+                <button onClick={() => removeFromCart(item.id)}>
+                Remove
+                </button>
+                <button onClick={() => setIsCartOpen(false)}>✕</button>
+            </div>
+            ))
+        )}
+        {cart.length > 0 && (
+            <h3>Total: ${getTotalPrice().toFixed(2)}</h3>
+        )}
+        </div>
+    );
 }
 
 export default CartSidebar;
