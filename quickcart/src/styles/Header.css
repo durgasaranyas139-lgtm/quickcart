@@ -38,3 +38,34 @@
   padding: 4px 8px;
   border-radius: 50%;
 }
+.header {
+  background: #333;
+  color: white;
+  padding: 15px;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.nav a {
+  color: white;
+  text-decoration: none;
+}
+
+.search-box {
+  margin-top: 10px;
+}
+
+.search-box input {
+  padding: 8px;
+  width: 100%;
+}
